@@ -1,0 +1,77 @@
+/* line 1, ../../compass/sass/styles.scss */
+body {
+  background-image: url("/static/images/background.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center center;
+  overflow-x: hidden;
+  height: 100%;
+  width: 100%;
+}
+
+/* line 13, ../../compass/sass/styles.scss */
+.navbar {
+  position: relative;
+  width: 100%;
+  color: #fff;
+  font-size: 22px;
+}
+
+/* line 21, ../../compass/sass/styles.scss */
+.navbar-brand {
+  margin-top: -12px;
+}
+
+/* line 24, ../../compass/sass/styles.scss */
+.navbar-brand img {
+  max-width: 100px;
+  width: 50px;
+}
+
+/* line 30, ../../compass/sass/styles.scss */
+.icon {
+  font-size: 30px;
+}
+
+/* line 34, ../../compass/sass/styles.scss */
+.main-content-wrapper {
+  padding: 10%;
+}
+/* line 39, ../../compass/sass/styles.scss */
+.main-content-wrapper .left-bar-wrapper .left-contents {
+  border-radius: 10%;
+  background-color: #fff;
+  height: 600px;
+}
+/* line 43, ../../compass/sass/styles.scss */
+.main-content-wrapper .left-bar-wrapper .left-contents .home-profile-pic {
+  padding: 20%;
+}
+/* line 45, ../../compass/sass/styles.scss */
+.main-content-wrapper .left-bar-wrapper .left-contents .home-profile-pic img {
+  border-radius: 50%;
+}
+/* line 55, ../../compass/sass/styles.scss */
+.main-content-wrapper .right-bar-wrapper {
+  padding-left: 20px;
+}
+/* line 59, ../../compass/sass/styles.scss */
+.main-content-wrapper .right-bar-wrapper .right-contents {
+  border-radius: 5%;
+}
+/* line 63, ../../compass/sass/styles.scss */
+.main-content-wrapper .right-bar-wrapper .right-contents .post-submit textarea {
+  width: 50%;
+}
+/* line 68, ../../compass/sass/styles.scss */
+.main-content-wrapper .right-bar-wrapper .right-contents .posts {
+  padding: 20px 0;
+  background-color: #fff;
+  border-radius: 2%;
+  border: 2px solid #000 !important;
+}
+/* line 74, ../../compass/sass/styles.scss */
+.main-content-wrapper .right-bar-wrapper .right-contents .posts .name-and-post .post-content {
+  word-wrap: break-word;
+}

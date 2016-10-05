@@ -1,0 +1,91 @@
+{% extends 'layout.html'%}
+{%block body%}
+<style>
+
+.form-control{
+  width: 20%;
+}
+</style>
+{%if message%}
+<div class="alert alert-danger">{{message}}</div>
+{%endif%}
+<form class="form-horizontal" action="/register_submit" enctype="multipart/form-data" method="POST">
+  <fieldset>
+    <legend>Register</legend>
+    <!-- Enter Email -->
+    <div class="form-group">
+      <label for="inputEmail" class="col-lg-2 control-label">Email</label>
+      <div class="col-lg-10">
+        <input name="email" type="email" class="form-control" id="inputEmail" placeholder="Email">
+      </div>
+    </div>
+    <!-- Enter Username -->
+        <div class="form-group">
+      <label name="username" for="username" class="col-lg-2 control-label">Username</label>
+      <div class="col-lg-10">
+        <input name="username" type="text" class="form-control" id="username" placeholder="Username">
+      </div>
+    </div>
+    <!-- Enter password -->
+    <div class="form-group">
+      <label for="inputPassword" class="col-lg-2 control-label">Password</label>
+      <div class="col-lg-10">
+        <input name="password" type="password" class="form-control" id="inputPassword" placeholder="Password">
+       
+      </div>
+    </div>
+
+    <!-- Confirm Password -->
+    <div class="form-group">
+      <label for="inputPassword" class="col-lg-2 control-label"> Confirm Password</label>
+      <div class="col-lg-10">
+        <input name="confirm-password" type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password">
+      
+      </div>
+    </div>
+    <!-- Choose Image -->
+     <div class="form-group">
+	    <label for="inputPassword3" class="col-sm-2 control-label">Image</label>
+	    <div class="col-sm-10">
+	      <input type="file" name="profile_pic"  class="form-control" id="inputPassword3" placeholder="Image" style="width:300px;">
+	    </div>
+    </div>
+
+    <!-- Add About me -->
+    <div class="form-group">
+      <label for="textArea" class="col-lg-2 control-label">Textarea</label>
+      <div class="col-lg-10">
+        <textarea name="bio" class="form-control" rows="3" id="textArea"></textarea>
+        <span class="help-block">About me:</span>
+      </div>
+    </div>
+   <!--  <div class="form-group">
+      <label class="col-lg-2 control-label">Radios</label>
+      <div class="col-lg-10">
+        <div class="radio">
+          <label>
+            <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="">
+            Option one is this
+          </label>
+        </div>
+        <div class="radio">
+          <label>
+            <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+            Option two can be something else
+          </label>
+        </div>
+      </div>
+    </div> -->
+   
+    <div class="form-group">
+      <div class="col-lg-10 col-lg-offset-2">
+        <button type="reset" class="btn btn-default">Cancel</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </fieldset>
+</form>
+
+
+{%endblock%}
+

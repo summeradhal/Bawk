@@ -1,0 +1,206 @@
+# import flask stuff
+from flask import Flask,render_template,redirect, request, session, jsonify
+from flaskext.mysql import MySQL
+import bcrypt
+
+
+
+# set up mysql connection here later
+mysql=MySQL()
+app=Flask(__name__)
+# Add to the app (Flask Object) some config data for our connection
+app.config['MYSQL_DATABASE_USER'] = 'x'
+app.config['MYSQL_DATABASE_PASSWORD'] = 'x'
+# the name of the database we want to connect to at the db server
+app.config['MYSQL_DATABASE_DB'] = 'bawk'
+# Where the mysql server is at
+app.config['MYSQL_DATABASE_HOST'] = '127.0.0.1'
+# use the mysql objects method "init_app" and pass it the flask object 
+mysql.init_app(app)
+
+
+app.secret_key='HSDG(#*&@(#&(JDKWJDWJJ89729837&*@&#*(jkhkja@*&'
+conn = mysql.connect()
+cursor = conn.cursor()
+
+@app.route('/')
+def homepage():
+
+	if 'username' in session:
+		
+		homepage_profile_pic="SELECT profile_pic FROM user WHERE username='%s'" % session['username']
+		print homepage_profile_pic
+		cursor.execute(homepage_profile_pic)
+		homepage_profile_pic=cursor.fetchone()
+		
+
+		homepage_page_query="SELECT user.id,username,profile_pic,post_content,current_vote,date FROM user INNER JOIN  posts ON user.id=posts.user_id"
+		cursor.execute(homepage_page_query)
+		homepage_page_query=cursor.fetchall()
+
+		return render_template('homepage.html',
+			homepage_profile_pic=homepage_profile_pic,
+			homepage_page_query=homepage_page_query)
+	else:
+		return redirect('/?message=YouMustLogIn')
+			
+
+
+@app.route('/login')
+def login():
+	if request.args.get('message'):
+		return render_template('login.html',
+			message="Login failed")
+	elif request.args.get('logout-message'):
+		return render_template('login.html',
+			message="You are now logged out")
+	else:
+		
+		return render_template('login.html')
+
+@app.route('/login_submit',methods=["POST"])
+def login_submit():
+	username=request.form['username']
+	password=request.form['password'].encode('utf-8')
+	user_sql="SELECT username,password,id FROM user WHERE username='"+username+"'"
+	result=cursor.execute(user_sql)
+
+	mysql_pass=cursor.fetchone()[1].encode('utf-8')
+
+	print mysql_pass
+	print password
+	if bcrypt.checkpw(password,mysql_pass):
+   		session['username']=username
+   		session['id']=user_sql[2]
+
+		return redirect('/')
+	else:
+		return redirect('/login?message=failed')
+	 
+	# to check a hash against english
+
+		
+		
+
+
+@app.route('/logout')
+def logout(): 
+	#nuke their session vars. this will end session which is what we use to let them into the portal
+	session.clear()
+	return redirect('/login?logout-message=LoggedOut')
+
+
+
+
+@app.route('/register')
+def register():
+	if request.args.get('username'):
+		return render_template('register.html',
+		message="That username is already taken")
+	elif request.args.get('password'):
+		return render_template('register.html',
+		message="Passwords do not match")
+
+	else:
+
+		return render_template('register.html')
+
+@app.route('/register_submit',methods=['POST'])
+def register_submit():
+	# First check to see if username is already taken
+	# this means a select statement
+	check_username_query="SELECT * FROM user WHERE username = '%s'"%request.form['username']
+	# print check_username_query
+	cursor.execute(check_username_query)
+	check_username_result=cursor.fetchone()
+	if check_username_result is None:
+		#no match. Insert
+		email=request.form['email']
+		username=request.form['username']
+		password=request.form['password'].encode('utf-8')
+		confirm_password=request.form['confirm-password'].encode('utf-8')
+		hashed_password=bcrypt.hashpw(password,bcrypt.gensalt())
+		profile_pic = request.files['profile_pic']
+		# image.save passes where we want to save it which is image.filename
+		profile_pic.save('static/images/'+profile_pic.filename)
+		profile_pic_path=profile_pic.filename
+		bio= request.form['bio']
+		print password
+		print confirm_password
+		if (password==confirm_password):
+			user_insert_query="INSERT INTO user VALUES(DEFAULT,'"+email+"','"+username+"','"+hashed_password+"','"+profile_pic_path+"','"+bio+"')"
+			cursor.execute(user_insert_query)
+			conn.commit()
+			user_sql="SELECT username,password,id FROM user WHERE username='"+username+"'"
+			result=cursor.execute(user_sql)
+			session['username']=username
+			session['id']=user_sql[2]
+   			
+			return redirect('/')
+		else:
+			
+			return redirect('/register?password=nomatch')
+
+
+	else:
+		return redirect('/register?username=taken')
+		print check_username_result
+		return "done"
+
+	# Second if it is talen send them back to the registration page with a message
+	# Second B, if its not taken then insert user into mysql
+
+# Route for posting off of the homepage
+
+
+
+@app.route('/home_post_submit',methods=["POST"])
+def post_submit():
+	post_content=request.form['post_content']
+	get_user_id_query="SELECT id FROM user WHERE username='%s'"%session['username']
+	cursor.execute(get_user_id_query)
+	get_user_id_result=cursor.fetchone()
+	user_id=get_user_id_result[0]
+
+	insert_post_query="INSERT INTO posts (post_content,user_id,current_vote) VALUES ('"+post_content+"',"+str(user_id)+",0)"
+	cursor.execute(insert_post_query)
+	conn.commit()
+	return redirect('/')
+
+@app.route('/dashboard')
+def dashboard():
+	if 'username' in session:
+		dashboard_page_query="SELECT user.id,username,profile_pic,post_content,current_vote,date FROM user INNER JOIN  posts ON user.id=posts.user_id"
+		cursor.execute(dashboard_page_query)
+		dashboard_page_query=cursor.fetchall()
+
+		return render_template('dashboard.html',
+			dashboard_page_query=dashboard_page_query)
+	else:
+		return redirect('/admin?message=YouMustLogIn')
+	return render_template('dashboard.html')
+
+
+@app.route('/dashboard_post_submit',methods=["POST"])
+def dashboard_submit():
+	post_content=request.form['post_content']
+	get_user_id_query="SELECT id FROM user WHERE username='%s'"%session['username']
+	cursor.execute(get_user_id_query)
+	get_user_id_result=cursor.fetchone()
+	user_id=get_user_id_result[0]
+
+	insert_post_query="INSERT INTO posts (post_content,user_id,current_vote) VALUES ('"+post_content+"',"+str(user_id)+",0)"
+	cursor.execute(insert_post_query)
+	conn.commit()
+	return redirect('/dashboard')
+
+
+
+if __name__=="__main__":
+	app.run(debug=True)
+
+
+
+
+
+

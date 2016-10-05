@@ -1,0 +1,71 @@
+{% extends 'layout.html' %}
+{% block body %}
+
+
+<div class="main-content-wrapper col-sm-12">
+	<div class="left-bar col-sm-2 col-sm-offset-1">
+		<div class="left-contents">
+
+		</div> <!-- End of LEFT CONTENTS -->
+	</div> <!-- End of LEFT BAR -->
+
+	<div class="right-bar-wrapper col-sm-8">
+		<div class="right-contents">
+		 <!-- Beginning of Post Submit -->
+			
+				<form  class="post-submit col-sm-8" id="submit-post-form" action="dashboard_post_submit" method="POST">
+					<textarea name="post_content" col="60" rows="6"></textarea>
+					<input type="hidden" value="{{user_id}}">
+					<button type="submit" class="btn btn-primary"> Post</button>
+				</form><!-- End of post submit -->
+			 
+
+
+
+
+			<!-- Beginning of POSTS -->
+			<{% for row in dashboard_page_query%}
+			<div class="posts col-sm-12">
+				<!-- User who posted profile pic -->
+				<div class="profile-pic col-sm-2">
+					<img src="static/images/{{row[2]}}" class="img-responsive">
+				</div>
+				<!-- Name of User and their Post -->
+				<div class="name-post col-sm-6">
+				<!-- Name of user who posted  -->
+					<div class="name ">
+						{{row[1]}}
+					</div>
+					<!-- Post Content -->
+					<div class="post-content ">
+						{{row[3]}}
+					</div>
+				</div> <!-- End of Name-Post -->
+
+				<div class="time">
+					<!-- INSERT DATE & TIME HERE -->
+				</div>
+				<div class="votes col-sm-2">
+					<div class="vote upvote " >
+						<i class="icon ion-ios-arrow-up"></i>
+					</div>
+					<div class="vote-count">
+						<!-- INSERT VOTE COUNT -->
+					</div>
+					<div class="vote downvote">
+						<i class="icon ion-ios-arrow-down"></i>
+					</div>
+				</div>
+
+			</div> <!-- End of Posts-->
+			{%endfor%}
+		</div> <!-- End of RIGHT CONTENTS -->
+	</div> <!-- End of RIGHT BAR -->
+</div> <!--END OF MAIN -->
+
+
+{%endblock%}
+
+
+
+

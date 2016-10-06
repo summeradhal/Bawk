@@ -6,7 +6,7 @@
 	<div class="left-bar-wrapper col-sm-6 ">
 		<div class="left-contents col-sm-8">
 			<div class="home-profile-pic col-sm-12">	
-				<a href="" data-toggle="modal" data-target="#myModal"><img src="static/images/{{homepage_profile_pic[0]}}" class="img-responsive"></a>
+				<a href="" data-toggle="modal" data-target="#myModal"><img src="static/images/{{profile_page_pic[0]}}" class="img-responsive"></a>
 
 
 					<!-- Modal -->
@@ -18,7 +18,7 @@
 					        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
 					      </div>
 					      <div class="modal-body ">
-					        	<img src="static/images/{{homepage_profile_pic[0]}}" class="img-responsive">
+					        	<img src="static/images/{{profile_page_pic[0]}}" class="img-responsive">
 					     
 						
 					      </div>
@@ -33,7 +33,7 @@
 							 
 							<!-- Beginning of Comments -->
 
-							{% for row in comment_page_query%}
+							{% for row in profile_comment_query%}
 								
 							<div class="posts col-sm-8">
 								<!-- User who posted profile pic -->
@@ -106,7 +106,7 @@
 			</div>
 			<!-- Name on Profile left bar -->
 			<div class="name-profile">
-				{{session['username']}}
+				
 			</div>
 			<div class="follw-unfollow">
 			<div class="follow">
@@ -157,7 +157,7 @@
 
 			
 			<!-- Beginning of POSTS -->
-			{% for row in homepage_page_query%}
+			{% for row in profile_page_query%}
 				
 			<div class="posts col-sm-12">
 				<!-- User who posted profile pic -->

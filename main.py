@@ -34,7 +34,7 @@ def homepage():
 		homepage_profile_pic=cursor.fetchone()
 		
 
-		homepage_page_query="SELECT user.id,username,profile_pic,post_content,current_vote,date FROM user INNER JOIN  posts ON user.id=posts.user_id ORDER BY date DESC"
+		homepage_page_query="SELECT user.id,username,profile_pic,post_content,current_vote,date,posts.id FROM user INNER JOIN  posts ON user.id=posts.user_id ORDER BY date DESC"
 		cursor.execute(homepage_page_query)
 		homepage_page_query=cursor.fetchall()
 
@@ -231,6 +231,7 @@ def process_vote():
 	# It's possible we get None back, becaues the user hsn't voted on this post
 	if check_user_votes_result is None:
 		# User hasn't voted. Insert.
+
 		insert_user_vote_query = "INSERT INTO votes (post_id, user_id, vote_type) VALUES ('"+str(post_id)+"', '"+str(session['id'])+"', '"+str(vote_type)+"')"
 		# print insert_user_vote_query
 		cursor.execute(insert_user_vote_query)

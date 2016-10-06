@@ -1,5 +1,5 @@
 # import flask stuff
-from flask import Flask,render_template,redirect, request, session, jsonify
+from flask import Flask,render_template,redirect,request,session,jsonify
 from flaskext.mysql import MySQL
 import bcrypt
 
@@ -34,7 +34,7 @@ def homepage():
 		homepage_profile_pic=cursor.fetchone()
 		
 
-		homepage_page_query="SELECT user.id,username,profile_pic,post_content,current_vote,date FROM user INNER JOIN  posts ON user.id=posts.user_id"
+		homepage_page_query="SELECT user.id,username,profile_pic,post_content,current_vote,date FROM user INNER JOIN  posts ON user.id=posts.user_id ORDER BY date DESC"
 		cursor.execute(homepage_page_query)
 		homepage_page_query=cursor.fetchall()
 
@@ -165,6 +165,7 @@ def post_submit():
 	insert_post_query="INSERT INTO posts (post_content,user_id,current_vote) VALUES ('"+post_content+"',"+str(user_id)+",0)"
 	cursor.execute(insert_post_query)
 	conn.commit()
+
 	return redirect('/')
 
 @app.route('/dashboard')
@@ -193,6 +194,41 @@ def dashboard_submit():
 	cursor.execute(insert_post_query)
 	conn.commit()
 	return redirect('/dashboard')
+
+
+@app.route('/process_vote', methods=['POST'])
+def process_vote():
+	# check to see, has th euser voted on this particular item
+	post_id = request.form['vid'] # the post they voted on. This came from jquery $.ajax
+	vote_type = request.form['voteType']
+	check_user_votes_query = "SELECT * FROM votes INNER JOIN user ON user.id = votes.user_id WHERE user.username = '%s' AND votes.post_id = '%s'" % (session['username'], post_id)
+	# print check_user_votes_query
+	cursor.execute(check_user_votes_query)
+	check_user_votes_result = cursor.fetchone()
+
+	# It's possible we get None back, becaues the user hsn't voted on this post
+	if check_user_votes_result is None:
+		# User hasn't voted. Insert.
+		insert_user_vote_query = "INSERT INTO votes (post_id, user_id, vote_type) VALUES ('"+str(post_id)+"', '"+str(session['id'])+"', '"+str(vote_type)+"')"
+		# print insert_user_vote_query
+		cursor.execute(insert_user_vote_query)
+		conn.commit()
+		return jsonify("voteCounted")
+	else:
+		check_user_vote_direction_query = "SELECT * FROM votes INNER JOIN user ON user.id = votes.user_id WHERE user.username = '%s' AND votes.post_id = '%s' AND votes.vote_type = %s" % (session['username'], post_id, vote_type)
+		cursor.execute(check_user_vote_direction_query)
+		check_user_vote_direction_result = cursor.fetchone()
+		if check_user_vote_direction_result is None:
+			# User has voted, but not this direction. Update
+			update_user_vote_query = "UPDATE votes SET vote_type = %s WHERE user_id = '%s' AND post_id = '%s'" % (vote_type, session['id'], post_id)
+			cursor.execute(update_user_vote_query)
+			conn.commit()
+			return "voteChanged"
+		else:
+			# User has already voted this directino on this post. No dice.
+			return "alreadyVoted"
+
+
 
 
 

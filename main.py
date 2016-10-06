@@ -38,8 +38,13 @@ def homepage():
 		cursor.execute(homepage_page_query)
 		homepage_page_query=cursor.fetchall()
 
+		comment_page_query="SELECT user.id,username,profile_pic,post_content,current_vote,date FROM user INNER JOIN  comments ON user.id=comments.user_id "
+		cursor.execute(comment_page_query)
+		comment_page_query=cursor.fetchall()
+
 		return render_template('homepage.html',
 			homepage_profile_pic=homepage_profile_pic,
+			comment_page_query=comment_page_query,
 			homepage_page_query=homepage_page_query)
 	else:
 		return redirect('/?message=YouMustLogIn')
@@ -62,16 +67,21 @@ def login():
 def login_submit():
 	username=request.form['username']
 	password=request.form['password'].encode('utf-8')
-	user_sql="SELECT username,password,id FROM user WHERE username='"+username+"'"
-	result=cursor.execute(user_sql)
+	user_sql="SELECT username,password,id FROM user WHERE username = '%s'" % request.form['username']
+	cursor.execute(user_sql)
+	
+	result=cursor.fetchone()
 
-	mysql_pass=cursor.fetchone()[1].encode('utf-8')
-
+	mysql_pass=result[1].encode('utf-8')
+	mysql_id=result[2]
+	# print mysql_id
 	print mysql_pass
 	print password
+	print cursor
 	if bcrypt.checkpw(password,mysql_pass):
    		session['username']=username
-   		session['id']=user_sql[2]
+   		session['id']=mysql_id
+   		print session['id']
 
 		return redirect('/')
 	else:
@@ -171,7 +181,7 @@ def post_submit():
 @app.route('/dashboard')
 def dashboard():
 	if 'username' in session:
-		dashboard_page_query="SELECT user.id,username,profile_pic,post_content,current_vote,date FROM user INNER JOIN  posts ON user.id=posts.user_id"
+		dashboard_page_query="SELECT user.id,username,profile_pic,post_content,current_vote,date FROM user INNER JOIN  posts ON user.id=posts.user_id ORDER BY date DESC"
 		cursor.execute(dashboard_page_query)
 		dashboard_page_query=cursor.fetchall()
 
@@ -195,6 +205,18 @@ def dashboard_submit():
 	conn.commit()
 	return redirect('/dashboard')
 
+@app.route('/post_comment',methods=["POST"])
+def post_comment():
+	post_content=request.form['post_content']
+	get_user_id_query="SELECT id FROM user WHERE username='%s'"%session['username']
+	cursor.execute(get_user_id_query)
+	get_user_id_result=cursor.fetchone()
+	user_id=get_user_id_result[0]
+
+	insert_post_query="INSERT INTO comments (post_content,user_id,current_vote) VALUES ('"+post_content+"',"+str(user_id)+",0)"
+	cursor.execute(insert_post_query)
+	conn.commit()
+	return redirect('/')
 
 @app.route('/process_vote', methods=['POST'])
 def process_vote():

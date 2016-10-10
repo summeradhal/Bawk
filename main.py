@@ -260,6 +260,7 @@ def profile(username):
 		profile_page_pic="SELECT profile_pic FROM user WHERE username='%s'"%username
 		cursor.execute(profile_page_pic)
 		profile_page_pic=cursor.fetchone()
+		print profile_page_pic[0]
 		
 		profile_page_name="SELECT username FROM user WHERE username='%s'"%username
 		cursor.execute(profile_page_name)

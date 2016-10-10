@@ -15,7 +15,7 @@
 					    <div class="modal-content">
 					      <div class="modal-header">
 					        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+					        <h4 class="modal-title" id="myModalLabel"></h4>
 					      </div>
 					      <div class="modal-body ">
 					        	<img src="static/images/{{homepage_profile_pic[0]}}" class="img-responsive">
@@ -134,7 +134,15 @@
                 <div class="modal-body col-sm-12">
                     <label>Message Body:</label>
                     <textarea name="post_content" class="col-sm-8" rows="10"></textarea>
-                   <a> <i class="ion-ios-camera-outline"></i></a>
+                  
+                 <div class="form-group">
+	    		<label for="inputPassword3" class="col-sm-2 control-label">Image</label>
+	    		<div class="col-sm-10">
+
+	    		 <i class="icon ion-ios-camera-outline"> <input type="file" name="post-picture"  > </i></a>
+	      		
+	   			 </div>
+    			</div>	
 
                 </div>
                 <div class="modal-footer">
@@ -155,13 +163,13 @@
 			<div class="posts col-sm-12">
 				<!-- User who posted profile pic -->
 				<div class="profile-pic col-sm-2">
-					<img src="static/images/{{row[2]}}" class="img-responsive">
+					<a href="profile/{{row[1]}}"><img src="static/images/{{row[2]}}" class="img-responsive"></a>
 				</div>
 				<!-- Name of User and their Post -->
 				<div class="name-post col-sm-6">
 				<!-- Name of user who posted  -->
 					<div class="name ">
-						<a href="/profile/{{row[1]}}"> {{row[1]}}</a>
+						<a href="profile/{{row[1]}}"> {{row[1]}}</a>
 					</div>
 
 						{% if row[5]: %}

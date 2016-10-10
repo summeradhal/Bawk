@@ -6,7 +6,7 @@
 	<div class="left-bar-wrapper col-sm-6 ">
 		<div class="left-contents col-sm-8">
 			<div class="home-profile-pic col-sm-12">	
-				<a href="" data-toggle="modal" data-target="#myModal"><img src="static/images/{{profile_page_pic[0]}}" class="img-responsive"></a>
+				<a href="" data-toggle="modal" data-target="#myModal"><img src="../static/images/{{profile_page_pic[0]}}" class="img-responsive"></a>
 
 
 					<!-- Modal -->
@@ -15,10 +15,10 @@
 					    <div class="modal-content">
 					      <div class="modal-header">
 					        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+					        <h4 class="modal-title" id="myModalLabel"></h4>
 					      </div>
 					      <div class="modal-body ">
-					        	<img src="static/images/{{profile_page_pic[0]}}" class="img-responsive">
+					        	<img src="../static/images/{{profile_page_pic[0]}}" class="img-responsive">
 					     
 						
 					      </div>
@@ -38,7 +38,7 @@
 							<div class="posts col-sm-8">
 								<!-- User who posted profile pic -->
 								<div class="profile-pic col-sm-2">
-									<img src="static/images/{{row[2]}}" class="img-responsive">
+									<a href="/profile/{{row[1]}}"><img src="static/images/{{row[2]}}" class="img-responsive"></a>
 								</div>
 								<!-- Name of User and their Post -->
 								<div class="name-post col-sm-6">
@@ -140,10 +140,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Post or Commment</h4>
+                    <h4 class="modal-title"></h4>
                 </div>
                 <div class="modal-body col-sm-12">
-                    <label>Message Body:</label>
+                    <label></label>
                     <textarea name="post_content" class="col-sm-8" rows="10"></textarea>
                    <a> <i class="ion-ios-camera-outline"></i></a>
 
@@ -166,8 +166,8 @@
 			<div class="posts col-sm-12">
 				<!-- User who posted profile pic -->
 				<div class="profile-pic col-sm-2">
-					<img src="static/images/{{row[2]}}" class="img-responsive">
-				</div>
+					<a href="/profile/{{row[1]}}"><img src="../static/images/{{row[2]}}" class="img-responsive">
+				</div></a>
 				<!-- Name of User and their Post -->
 				<div class="name-post col-sm-6">
 				<!-- Name of user who posted  -->

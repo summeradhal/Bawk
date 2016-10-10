@@ -316,6 +316,13 @@ def delete_follower(username):
 	else:
 		return redirect('/profile/%s'%username)
 
+@app.route('/search',methods=["POST"])
+def search():
+	searched_name = request.form['searched-name']
+
+	print searched_name
+	return redirect('/profile/%s'%searched_name)
+
 
 if __name__=="__main__":
 	app.run(debug=True)

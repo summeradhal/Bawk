@@ -34,7 +34,7 @@ def homepage():
 		homepage_profile_pic=cursor.fetchone()
 		
 
-		homepage_page_query="SELECT user.id,username,profile_pic,post_content,current_vote,date,posts.id FROM user INNER JOIN  posts ON user.id=posts.user_id ORDER BY date DESC"
+		homepage_page_query="SELECT user.id,username,profile_pic,post_content,current_vote,date,posts.id FROM user INNER JOIN  posts ON user.id=posts.user_id WHERE username='%s' ORDER BY date DESC"%session['username']
 		cursor.execute(homepage_page_query)
 		homepage_page_query=cursor.fetchall()
 

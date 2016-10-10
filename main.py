@@ -145,6 +145,7 @@ def register_submit():
 			result=cursor.execute(user_sql)
 			session['username']=username
 			session['id']=user_sql[2]
+			print session['id']
    			
 			return redirect('/')
 		else:
@@ -258,8 +259,13 @@ def profile(username):
 		
 		profile_page_pic="SELECT profile_pic FROM user WHERE username='%s'"%username
 		cursor.execute(profile_page_pic)
-		profile_page_pic=cursor.fetchone()
+		profile_page_pic=cursor.fetchall()
 		
+		profile_page_name="SELECT username FROM user WHERE username='%s'"%username
+		cursor.execute(profile_page_name)
+		profile_page_name=cursor.fetchone()
+		
+	
 
 		profile_page_query="SELECT user.id,username,profile_pic,post_content,current_vote,date,posts.id FROM user INNER JOIN  posts ON user.id=posts.user_id WHERE username='%s' ORDER BY date DESC"%username
 		cursor.execute(profile_page_query)
@@ -270,6 +276,7 @@ def profile(username):
 		profile_comment_query=cursor.fetchall()
 
 		return render_template('profile.html',
+			profile_page_name=profile_page_name,
 			profile_page_pic=profile_page_pic,
 			profile_comment_query=profile_comment_query,
 			profile_page_query=profile_page_query)
@@ -278,11 +285,21 @@ def profile(username):
 	
 
 
-@app.route('/follow_requests')
-def follow_requests():
+@app.route('/follow_requests/<username>',methods=['GET','POST'])
+def follow_requests(username):
 
-	return ('/dashboard')
-
+	if 'username' in session:
+		followed="SELECT id FROM user WHERE username='%s'"%username
+		cursor.execute(followed)
+		followed=cursor.fetchone()
+		followed_id=followed[0]
+		print followed_id
+		followers= "INSERT INTO friends VALUES (DEFAULT,'%s','%s')"%(followed_id,session['id'])
+		cursor.execute(followers)
+		conn.commit()
+		return redirect('/profile/<username>')
+	else:
+		return rendirect('/profile/<username>')
 if __name__=="__main__":
 	app.run(debug=True)
 

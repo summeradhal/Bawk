@@ -259,13 +259,13 @@ def profile(username):
 		
 		profile_page_pic="SELECT profile_pic FROM user WHERE username='%s'"%username
 		cursor.execute(profile_page_pic)
-		profile_page_pic=cursor.fetchall()
+		profile_page_pic=cursor.fetchone()
 		
 		profile_page_name="SELECT username FROM user WHERE username='%s'"%username
 		cursor.execute(profile_page_name)
 		profile_page_name=cursor.fetchone()
 		
-	
+		
 
 		profile_page_query="SELECT user.id,username,profile_pic,post_content,current_vote,date,posts.id FROM user INNER JOIN  posts ON user.id=posts.user_id WHERE username='%s' ORDER BY date DESC"%username
 		cursor.execute(profile_page_query)
@@ -297,9 +297,26 @@ def follow_requests(username):
 		followers= "INSERT INTO friends VALUES (DEFAULT,'%s','%s')"%(followed_id,session['id'])
 		cursor.execute(followers)
 		conn.commit()
-		return redirect('/profile/<username>')
+		return redirect('/profile/%s'%username)
 	else:
-		return rendirect('/profile/<username>')
+		return redirect('/profile/%s'%username)
+
+
+@app.route('/delete_follower/<username>',methods=['POST'])
+def delete_follower(username):
+	if 'username' in session:
+		followed="SELECT id FROM user WHERE username='%s'"%username
+		cursor.execute(followed)
+		followed=cursor.fetchone()
+		followed_id=followed[0]
+		unfollow="DELETE FROM friends WHERE follower_id='%s'"%followed_id
+		cursor.execute(unfollow)
+		conn.commit()
+		return redirect('/profile/%s'%username)
+	else:
+		return redirect('/profile/%s'%username)
+
+
 if __name__=="__main__":
 	app.run(debug=True)
 

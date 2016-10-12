@@ -108,18 +108,24 @@
 			<div class="name-profile">
 				{{profile_page_name[0]}}
 			</div>
-			<form class="unfollow" action="/follow_requests/{{profile_page_name[0]}}" method="POST">
-				<div class="follow">
-					<button type="submit" class="btn btn-primary" >Follow</button>
-				</div>
-				
-			</form>
+
+			{%if followed_already is not none %}
+			
 			<form class="unfollow" action="/delete_follower/{{profile_page_name[0]}}" method="POST">
 				<div class="unfollow">
 					<button type="submit" class="btn btn-default" >Unfollow</button>
 				</div>
 			</form>
+			{%else:%}
+			<form class="follow" action="/follow_requests/{{profile_page_name[0]}}" method="POST">
+
+				<div class="follow">
+					<button type="submit" class="btn btn-primary" >Follow</button>
+				</div>
+				
+			</form>
 			
+			{%endif%}
 		</div> <!-- End of LEFT CONTENTS -->
 	</div> <!-- End of LEFT BAR -->
 

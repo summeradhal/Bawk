@@ -260,17 +260,28 @@ def profile(username):
 		profile_page_pic="SELECT profile_pic FROM user WHERE username='%s'"%username
 		cursor.execute(profile_page_pic)
 		profile_page_pic=cursor.fetchone()
-		print profile_page_pic[0]
+		
 		
 		profile_page_name="SELECT username FROM user WHERE username='%s'"%username
 		cursor.execute(profile_page_name)
 		profile_page_name=cursor.fetchone()
+
+		profile_page_id="SELECT id FROM user WHERE username='%s'"%username
+		cursor.execute(profile_page_id)
+		profile_page_id=cursor.fetchone()
+		followed=profile_page_id[0]
+		print followed
 		
 		
 
 		profile_page_query="SELECT user.id,username,profile_pic,post_content,current_vote,date,posts.id FROM user INNER JOIN  posts ON user.id=posts.user_id WHERE username='%s' ORDER BY date DESC"%username
 		cursor.execute(profile_page_query)
 		profile_page_query=cursor.fetchall()
+
+		
+		followed_already="SELECT f.follower_id FROM friends f WHERE f.followee_id='%s'"%session['id']
+		cursor.execute(followed_already)
+		followed_already=cursor.fetchone()
 
 		profile_comment_query="SELECT user.id,username,profile_pic,post_content,current_vote,date FROM user INNER JOIN  comments ON user.id=comments.user_id "
 		cursor.execute(profile_comment_query)
@@ -280,7 +291,9 @@ def profile(username):
 			profile_page_name=profile_page_name,
 			profile_page_pic=profile_page_pic,
 			profile_comment_query=profile_comment_query,
-			profile_page_query=profile_page_query)
+			profile_page_query=profile_page_query,
+			followed_already=followed_already)
+	
 	
 			
 	

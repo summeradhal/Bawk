@@ -84,3 +84,28 @@ body{
 		
 	
 }
+.friends-wrapper{
+
+	text-align:center;
+	
+	
+	.middle{
+		background-color:#fff;
+		display:inline-block;
+		
+		.friend-box{
+			display:inline-block;
+			.follow-pic{
+				padding:20px;
+				img{
+					
+					border-radius:50%;					
+				}
+			}
+			.follow-name{
+				
+				
+			}
+		}
+	}
+}

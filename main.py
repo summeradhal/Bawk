@@ -331,6 +331,55 @@ def delete_follower(username):
 	else:
 		return redirect('/profile/%s'%username)
 
+@app.route('/following/<username>')
+def following(username):
+	if 'username' in session:
+		followers_id="SELECT user.id FROM user LEFT JOIN friends ON follower_id=user.id WHERE followee_id='%s'"%session['id']
+		cursor.execute(followers_id)
+		followers_id=cursor.fetchone()
+
+		
+
+		followers="SELECT user.id,profile_pic,username FROM user LEFT JOIN friends ON follower_id=user.id WHERE followee_id='%s'"%session['id']
+		cursor.execute(followers)
+		followers=cursor.fetchall()
+		return render_template('follower.html',
+			followers=followers,
+			followers_id=followers_id
+			)
+	else:
+		return render_template('follower.html')
+
+@app.route('/follower_page/<username>',methods=['GET','POST'])
+def follower_page(username):
+
+	if 'username' in session:
+		followed="SELECT id FROM user WHERE username='%s'"%username
+		cursor.execute(followed)
+		followed=cursor.fetchone()
+		followed_id=followed[0]
+		print followed_id
+		followers= "INSERT INTO friends VALUES (DEFAULT,'%s','%s')"%(followed_id,session['id'])
+		cursor.execute(followers)
+		conn.commit()
+		return redirect('/following/%s'%username)
+	else:
+		return redirect('/following/%s'%username)
+
+@app.route('/delete_follower_page/<username>',methods=['POST'])
+def delete_follower_page(username):
+	if 'username' in session:
+		followed="SELECT id FROM user WHERE username='%s'"%username
+		cursor.execute(followed)
+		followed=cursor.fetchone()
+		followed_id=followed[0]
+		unfollow="DELETE FROM friends WHERE follower_id='%s'"%followed_id
+		cursor.execute(unfollow)
+		conn.commit()
+		return redirect('/following/%s'%username)
+	else:
+		return redirect('/following/%s'%username)
+
 @app.route('/search',methods=["POST"])
 def search():
 	searched_name = request.form['searched-name']

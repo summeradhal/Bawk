@@ -75,3 +75,25 @@ body {
 .main-content-wrapper .right-bar-wrapper .right-contents .posts .name-and-post .post-content {
   word-wrap: break-word;
 }
+
+/* line 87, ../../compass/sass/styles.scss */
+.friends-wrapper {
+  text-align: center;
+}
+/* line 92, ../../compass/sass/styles.scss */
+.friends-wrapper .middle {
+  background-color: #fff;
+  display: inline-block;
+}
+/* line 96, ../../compass/sass/styles.scss */
+.friends-wrapper .middle .friend-box {
+  display: inline-block;
+}
+/* line 98, ../../compass/sass/styles.scss */
+.friends-wrapper .middle .friend-box .follow-pic {
+  padding: 20px;
+}
+/* line 100, ../../compass/sass/styles.scss */
+.friends-wrapper .middle .friend-box .follow-pic img {
+  border-radius: 50%;
+}

@@ -279,9 +279,10 @@ def profile(username):
 		profile_page_query=cursor.fetchall()
 
 		
-		followed_already="SELECT f.follower_id FROM friends f WHERE f.followee_id='%s'"%session['id']
+		followed_already="SELECT f.follower_id FROM friends f WHERE f.followee_id='%s' AND f.follower_id='%s'"%(session['id'],followed)
 		cursor.execute(followed_already)
 		followed_already=cursor.fetchone()
+		print followed_already
 
 		profile_comment_query="SELECT user.id,username,profile_pic,post_content,current_vote,date FROM user INNER JOIN  comments ON user.id=comments.user_id "
 		cursor.execute(profile_comment_query)
@@ -340,9 +341,4 @@ def search():
 
 if __name__=="__main__":
 	app.run(debug=True)
-
-
-
-
-
 
